@@ -108,7 +108,7 @@
 </head>
 <body>
 
-<form action="handle_form_servelet" method="post">
+<form action="handle_form_servlet" method="post">
     <h2>Book Inventory Information Record Form</h2>
 
     <label for="title">Title:</label>
@@ -175,41 +175,7 @@
 
     <input type="submit" value="Save Changes">
 </form>
-<%
-    String successMessage = request.getParameter("success");
-    if (successMessage != null) {
-%>
-<h3>Submitted Book Information</h3>
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publisher</th>
-        <th>Edition</th>
-        <th>Cover Type</th>
-        <th>Category</th>
-        <th>Floor</th>
-        <th>Shelf Location</th>
-        <th>Quantity</th>
-        <th>Unit Price</th>
-    </tr>
-    <tr>
-        <td><%= request.getParameter("title") %></td>
-        <td><%= request.getParameter("author") %></td>
-        <td><%= request.getParameter("publisher") %></td>
-        <td><%= request.getParameter("edition") %></td>
-        <td><%= request.getParameter("cover_type") %></td>
-        <td><%= request.getParameter("category") %></td>
-        <td><%= request.getParameter("floor") %></td>
-        <td><%= request.getParameter("shelf_location") %></td>
-        <td><%= request.getParameter("quantity_on_hand") %></td>
-        <td><%= request.getParameter("unit_price") %></td>
-    </tr>
-</table>
-<%
-    }
-%>
-
+<h3><a href="handle_form_servlet">View Submitted Data</a></h3>
 
 </body>
 </html>

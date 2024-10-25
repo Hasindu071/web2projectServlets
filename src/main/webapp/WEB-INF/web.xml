@@ -6,12 +6,12 @@
 
     <!--Defining the Servlet to handle the form submission-->
     <servlet>
-        <servlet-name>handle_form_servelet</servlet-name>
-        <servlet-class>com.example.web2project.handle_form_servelet</servlet-class>
+        <servlet-name>handle_form_servlet</servlet-name>
+        <servlet-class>com.example.web2project.handle_form_servlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>handle_form_servelet</servlet-name>
+        <servlet-name>handle_form_servlet</servlet-name>
         <url-pattern>/welcome</url-pattern>
     </servlet-mapping>
 </web-app>
