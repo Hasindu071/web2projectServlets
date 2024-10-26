@@ -31,22 +31,6 @@ public class handle_form_servlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Get the action from the request to determine whether to add, update, or delete
-        String action = request.getParameter("action");
-
-        // Check which action to perform
-        if ("add".equalsIgnoreCase(action)) {
-            addEntry(request, response);
-        } else if ("update".equalsIgnoreCase(action)) {
-            updateEntry(request, response);
-        } else if ("delete".equalsIgnoreCase(action)) {
-            deleteEntry(request, response);
-        } else {
-            response.sendRedirect("index.jsp?error=Invalid action!");
-        }
-    }
-
-    private void addEntry(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get the form data
         String title = request.getParameter("title");
         String author = request.getParameter("author");
@@ -75,7 +59,7 @@ public class handle_form_servlet extends HttpServlet {
         double unitPrice;
         try {
             quantityOnHand = Integer.parseInt(quantityOnHandStr);
-            unitPrice = Double.parseDouble(unitPriceStr.replace("$", "").trim());
+            unitPrice = Double.parseDouble(unitPriceStr.replace("$", "").trim()); // Remove $ sign if present
         } catch (NumberFormatException e) {
             LOGGER.log(Level.SEVERE, "Invalid quantity or price format", e);
             response.sendRedirect("index.jsp?error=Invalid quantity or price format!");
@@ -101,81 +85,6 @@ public class handle_form_servlet extends HttpServlet {
 
         // Redirect to a success page
         response.sendRedirect("index.jsp?success=Data submitted successfully");
-    }
-
-    private void updateEntry(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id"); // Get the ID of the book to update
-        String title = request.getParameter("title");
-        String author = request.getParameter("author");
-        String publisher = request.getParameter("publisher");
-        String edition = request.getParameter("edition");
-        String coverType = request.getParameter("cover_type");
-        String category = request.getParameter("category");
-        String floor = request.getParameter("floor");
-        String shelfLocation = request.getParameter("shelf_location");
-        String quantityOnHandStr = request.getParameter("quantity_on_hand");
-        String unitPriceStr = request.getParameter("unit_price");
-
-        // Validate the input fields
-        if (isNullOrEmpty(title) || isNullOrEmpty(author) || isNullOrEmpty(publisher) ||
-                isNullOrEmpty(edition) || isNullOrEmpty(coverType) || isNullOrEmpty(category) ||
-                isNullOrEmpty(floor) || isNullOrEmpty(shelfLocation) ||
-                isNullOrEmpty(quantityOnHandStr) || isNullOrEmpty(unitPriceStr) || isNullOrEmpty(id)) {
-
-            LOGGER.log(Level.WARNING, "Missing required fields in update submission");
-            response.sendRedirect("index.jsp?error=All fields are required!");
-            return;
-        }
-
-        // Parse quantity and unit price
-        int quantityOnHand;
-        double unitPrice;
-        try {
-            quantityOnHand = Integer.parseInt(quantityOnHandStr);
-            unitPrice = Double.parseDouble(unitPriceStr.replace("$", "").trim());
-        } catch (NumberFormatException e) {
-            LOGGER.log(Level.SEVERE, "Invalid quantity or price format", e);
-            response.sendRedirect("index.jsp?error=Invalid quantity or price format!");
-            return;
-        }
-
-        // Use getServletContext().getRealPath() to get the actual path for the XML file
-        String xmlFilePath = getServletContext().getRealPath("/WEB-INF/data.xml");
-        LOGGER.log(Level.INFO, "XML File Path: {0}", xmlFilePath);
-
-        // Update data in XML
-        try {
-            handle_XML.updateDataInXML(id, title, author, publisher, edition, coverType, category, floor, shelfLocation, quantityOnHand, unitPrice, xmlFilePath);
-            LOGGER.log(Level.INFO, "Data updated successfully in XML");
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Failed to update data in XML", e);
-            response.sendRedirect("index.jsp?error=Failed to update data in XML!");
-            return;
-        }
-
-        // Redirect to a success page
-        response.sendRedirect("index.jsp?success=Data updated successfully");
-    }
-
-    private void deleteEntry(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id"); // Get the ID of the book to delete
-
-        // Use getServletContext().getRealPath() to get the actual path for the XML file
-        String xmlFilePath = getServletContext().getRealPath("/WEB-INF/data.xml");
-        LOGGER.log(Level.INFO, "XML File Path: {0}", xmlFilePath);
-
-        // Delete data from XML
-        try {
-            handle_XML.deleteDataFromXML(id, xmlFilePath);
-            LOGGER.log(Level.INFO, "Data deleted successfully from XML");
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Failed to delete data from XML", e);
-            response.sendRedirect("index.jsp?error=Failed to delete data from XML!");
-            return;
-        }
-
-        // Redirect to a success page
-        response.sendRedirect("index.jsp?success=Data deleted successfully");
     }
 
     private boolean isNullOrEmpty(String value) {
@@ -214,11 +123,12 @@ public class handle_form_servlet extends HttpServlet {
 
                 entriesData.add(entryData);
             }
+
             request.setAttribute("entriesData", entriesData);
             request.getRequestDispatcher("/viewBook.jsp").forward(request, response);
+
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error processing XML", e);
-            response.sendRedirect("index.jsp?error=Error processing XML data!");
+            response.getWriter().println("<p>Error reading XML data: " + e.getMessage() + "</p>");
         }
     }
 }

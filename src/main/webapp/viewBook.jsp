@@ -116,13 +116,11 @@
       <td><%= entry.get("shelfLocation") %></td>
       <td><%= entry.get("quantityOnHand") %></td>
       <td><%= entry.get("unitPrice") %></td>
-      <td class="action-buttons">
-        <form action="book?action=edit&id=<%= bookId %>" method="get">
-          <button type="submit" class="edit-button">Edit</button>
-        </form>
-        <form action="book?action=delete&id=<%= bookId %>" method="post" onsubmit="return confirm('Are you sure you want to delete this book?');">
-          <button type="submit" class="delete-button">Delete</button>
-        </form>
+      <td>
+        <div class="action-buttons">
+          <a href="editBook?id=<%= bookId %>" class="edit-button">Edit</a>
+          <a href="deleteBook?id=<%= bookId %>" class="delete-button" onclick="return confirm('Are you sure you want to delete this book?');">Delete</a>
+        </div>
       </td>
     </tr>
     <%
@@ -137,7 +135,7 @@
   <%
     }
   %>
-  <a class="back-link" href="book?action=view">Back to Book List</a>
+  <a class="back-link" href="index.jsp">Back to Book List</a>
 </div>
 </body>
 </html>
