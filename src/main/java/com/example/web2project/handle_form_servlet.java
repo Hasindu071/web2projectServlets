@@ -56,19 +56,19 @@ public class handle_form_servlet extends HttpServlet {
             if ("edit".equals(action)) {
                 handle_XML.updateDataInXML(id, title, author, publisher, edition, coverType, category, floor, shelfLocation, quantityOnHand, unitPrice, xmlFilePath);
                 LOGGER.log(Level.INFO, "Data updated successfully in XML");
-                response.sendRedirect("index.jsp?success=Data updated successfully");
+                response.sendRedirect("form.jsp?success=Data updated successfully");
             } else {
                 String newId = String.valueOf(new Date().getTime());
                 handle_XML.saveDataToXML(newId, title, author, publisher, edition, coverType, category, floor, shelfLocation, quantityOnHand, unitPrice, xmlFilePath);
                 LOGGER.log(Level.INFO, "Data saved successfully to XML");
-                response.sendRedirect("index.jsp?success=Data submitted successfully");
+                response.sendRedirect("form.jsp?success=Data submitted successfully");
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "XML operation failed", e);
-            response.sendRedirect("index.jsp?error=" + e.getMessage());
+            response.sendRedirect("form.jsp?error=" + e.getMessage());
         } catch (NumberFormatException e) {
             LOGGER.log(Level.SEVERE, "Invalid quantity or price format", e);
-            response.sendRedirect("index.jsp?error=Invalid quantity or price format!");
+            response.sendRedirect("form.jsp?error=Invalid quantity or price format!");
         }
     }
 
@@ -100,7 +100,7 @@ public class handle_form_servlet extends HttpServlet {
             if ("delete".equals(action)) {
                 String id = request.getParameter("id");
                 handle_XML.deleteDataFromXML(id, xmlFilePath);
-                response.sendRedirect("index.jsp?success=Data deleted successfully");
+                response.sendRedirect("form.jsp?success=Data deleted successfully");
             } else if ("edit".equals(action)) {
                 String id = request.getParameter("id");
                 HashMap<Object, Object> bookData = handle_XML.getDataById(id, xmlFilePath);
@@ -129,7 +129,7 @@ public class handle_form_servlet extends HttpServlet {
                 request.getRequestDispatcher("/viewBook.jsp").forward(request, response);
             }
         } catch (IOException e) {
-            response.sendRedirect("index.jsp?error=" + e.getMessage());
+            response.sendRedirect("form.jsp?error=" + e.getMessage());
         } catch (Exception e) {
             response.getWriter().println("<p>Error reading XML data: " + e.getMessage() + "</p>");
         }

@@ -8,7 +8,7 @@
     /* Page and Container Styling */
     body {
       font-family: 'Roboto', Arial, sans-serif;
-      background-color: #f0f2f5;
+      background-image: url('poth.jpg');
       margin: 0;
       padding: 20px;
     }
@@ -16,7 +16,7 @@
       background-color: #fff;
       padding: 30px;
       border-radius: 8px;
-      max-width: 10000000px;
+      max-width: 1300px; /* Set a reasonable max-width */
       margin: auto;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
@@ -29,8 +29,7 @@
     .search-container {
       display: flex;
       justify-content: center;
-      margin-top: 20px;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
     .search-bar {
       width: 300px;
