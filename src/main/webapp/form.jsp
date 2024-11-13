@@ -120,6 +120,7 @@
 <body>
 
 <form action="handle_form_servlet" method="post">
+    <input type="hidden" name="action" value="save">
     <!-- Back button -->
     <a href="index.jsp" class="back-button">Back</a>
     <h2>Book Inventory Information Record Form</h2>

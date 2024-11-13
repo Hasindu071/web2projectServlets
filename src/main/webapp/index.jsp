@@ -64,7 +64,7 @@
     <h1>Welcome to the Book Inventory System</h1>
     <div class="button-container">
         <a href="form.jsp" class="button">Go to Form</a>
-        <a href="viewBook.jsp" class="button">View Inventory</a>
+        <a href="handle_form_servlet" class="button">View Inventory</a>
     </div>
 </div>
 </body>

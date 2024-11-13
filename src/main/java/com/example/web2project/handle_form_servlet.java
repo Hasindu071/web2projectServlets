@@ -53,11 +53,13 @@ public class handle_form_servlet extends HttpServlet {
             int quantityOnHand = Integer.parseInt(quantityOnHandStr);
             double unitPrice = Double.parseDouble(unitPriceStr.replace("$", "").trim());
 
+            // If update is clicked this happens
             if ("edit".equals(action)) {
                 handle_XML.updateDataInXML(id, title, author, publisher, edition, coverType, category, floor, shelfLocation, quantityOnHand, unitPrice, xmlFilePath);
                 LOGGER.log(Level.INFO, "Data updated successfully in XML");
-                response.sendRedirect("form.jsp?success=Data updated successfully");
-            } else {
+                response.sendRedirect(request.getRequestURI() + "?success=Data updated successfully");
+                // if data is saved this happens
+            } else if ("save".equals(action)){
                 String newId = String.valueOf(new Date().getTime());
                 handle_XML.saveDataToXML(newId, title, author, publisher, edition, coverType, category, floor, shelfLocation, quantityOnHand, unitPrice, xmlFilePath);
                 LOGGER.log(Level.INFO, "Data saved successfully to XML");
@@ -91,26 +93,41 @@ public class handle_form_servlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         String xmlFilePath = getServletContext().getRealPath("/WEB-INF/data.xml");
+        List<HashMap<Object, Object>> entriesData = null;
 
         try {
+            // If no action is specified, load the data (this is the default behavior)
+            if (action == null || action.isEmpty()) {
+                entriesData = readXMLData(xmlFilePath);
+            }
+
+            // Handle delete action
             if ("delete".equals(action)) {
                 String id = request.getParameter("id");
                 handle_XML.deleteDataFromXML(id, xmlFilePath);
-                response.sendRedirect("form.jsp?success=Data deleted successfully");
-            } else if ("edit".equals(action)) {
+                response.sendRedirect("viewBook.jsp?success=Data deleted successfully");
+                return; // Ensure the rest of the code does not execute after redirect
+            }
+
+            // Handle edit action
+            else if ("edit".equals(action)) {
                 String id = request.getParameter("id");
                 HashMap<Object, Object> bookData = handle_XML.getDataById(id, xmlFilePath);
                 request.setAttribute("bookData", bookData);
                 request.getRequestDispatcher("/editBook.jsp").forward(request, response);
-            } else if ("search".equals(action)) {
+                return; // Ensure the rest of the code does not execute after forward
+            }
+
+            // Handle search action
+            else if ("search".equals(action)) {
                 String searchTerm = request.getParameter("search").toLowerCase();
-                List<HashMap<Object, Object>> entriesData = readXMLData(xmlFilePath);
+                entriesData = readXMLData(xmlFilePath);
                 List<HashMap<Object, Object>> filteredEntries = new ArrayList<>();
 
+                // Filter data based on search term
                 for (HashMap<Object, Object> entry : entriesData) {
                     String title = ((String) entry.get("title")).toLowerCase();
                     String author = ((String) entry.get("author")).toLowerCase();
@@ -121,19 +138,25 @@ public class handle_form_servlet extends HttpServlet {
                     }
                 }
 
-                request.setAttribute("entriesData", filteredEntries);
-                request.getRequestDispatcher("/viewBook.jsp").forward(request, response);
-            } else {
-                List<HashMap<Object, Object>> entriesData = readXMLData(xmlFilePath);
-                request.setAttribute("entriesData", entriesData);
-                request.getRequestDispatcher("/viewBook.jsp").forward(request, response);
+                entriesData = filteredEntries; // Set the filtered data
             }
-        } catch (IOException e) {
-            response.sendRedirect("form.jsp?error=" + e.getMessage());
+
+            // If entriesData is null or empty, show a message
+            if (entriesData == null || entriesData.isEmpty()) {
+                request.setAttribute("entriesData", null);
+                request.setAttribute("message", "No data available.");
+            } else {
+                request.setAttribute("entriesData", entriesData);
+            }
+
+            // Forward the request to viewBook.jsp
+            request.getRequestDispatcher("/viewBook.jsp").forward(request, response);
+
         } catch (Exception e) {
             response.getWriter().println("<p>Error reading XML data: " + e.getMessage() + "</p>");
         }
     }
+
 
     private List<HashMap<Object, Object>> readXMLData(String xmlFilePath) throws Exception {
         List<HashMap<Object, Object>> entriesData = new ArrayList<>();

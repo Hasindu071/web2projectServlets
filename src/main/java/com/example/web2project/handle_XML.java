@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 public class handle_XML {
 
+    // Method to save new book data into the XML file
     public static void saveDataToXML(String id, String title, String author, String publisher, String edition, String coverType,
                                      String category, String floor, String shelfLocation, int quantityOnHand, double unitPrice, String xmlFilePath) throws IOException {
         try {
@@ -34,7 +35,7 @@ public class handle_XML {
                 document.appendChild(root);
             }
 
-            // Create a new book element
+            // Create a new book element with details
             Element book = document.createElement("book");
             book.appendChild(createElementWithText(document, "id", id));
             book.appendChild(createElementWithText(document, "title", title));
@@ -57,6 +58,7 @@ public class handle_XML {
         }
     }
 
+    // Method to update existing book data by ID in the XML file
     public static void updateDataInXML(String id, String title, String author, String publisher, String edition, String coverType,
                                        String category, String floor, String shelfLocation, int quantityOnHand, double unitPrice, String xmlFilePath) throws IOException {
         try {
@@ -75,10 +77,11 @@ public class handle_XML {
             NodeList books = document.getElementsByTagName("book");
             boolean bookFound = false;
 
+            // Loop through the books and update the one with matching ID
             for (int i = 0; i < books.getLength(); i++) {
                 Element book = (Element) books.item(i);
                 if (book.getElementsByTagName("id").item(0).getTextContent().equals(id)) {
-                    // Update book details
+                    // Update the book details
                     book.getElementsByTagName("title").item(0).setTextContent(title);
                     book.getElementsByTagName("author").item(0).setTextContent(author);
                     book.getElementsByTagName("publisher").item(0).setTextContent(publisher);
@@ -105,6 +108,7 @@ public class handle_XML {
         }
     }
 
+    // Method to delete a book entry by ID from the XML file
     public static void deleteDataFromXML(String id, String xmlFilePath) throws IOException {
         try {
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -122,10 +126,10 @@ public class handle_XML {
             NodeList books = document.getElementsByTagName("book");
             boolean bookFound = false;
 
+            // Loop through the books and remove the one with matching ID
             for (int i = 0; i < books.getLength(); i++) {
                 Element book = (Element) books.item(i);
                 if (book.getElementsByTagName("id").item(0).getTextContent().equals(id)) {
-                    // Remove the book element
                     book.getParentNode().removeChild(book);
                     bookFound = true;
                     break;
@@ -143,6 +147,7 @@ public class handle_XML {
         }
     }
 
+    // Method to retrieve book data by ID from the XML file
     public static HashMap<Object, Object> getDataById(String id, String xmlFilePath) {
         HashMap<Object, Object> bookData = new HashMap<>();
         try {
@@ -160,6 +165,7 @@ public class handle_XML {
             NodeList books = document.getElementsByTagName("book");
             boolean bookFound = false;
 
+            // Loop through the books and find the one with matching ID
             for (int i = 0; i < books.getLength(); i++) {
                 Element book = (Element) books.item(i);
                 if (book.getElementsByTagName("id").item(0).getTextContent().equals(id)) {
@@ -190,19 +196,20 @@ public class handle_XML {
         return bookData;
     }
 
-    private static Element createElementWithText(Document document, String tagName, String text) {
+    // Helper method to create an element with text content
+    private static Element createElementWithText(Document document, String tagName, String textContent) {
         Element element = document.createElement(tagName);
-        element.appendChild(document.createTextNode(text));
+        element.appendChild(document.createTextNode(textContent));
         return element;
     }
 
+    // Helper method to write the updated document back to the XML file
     private static void writeDocumentToFile(Document document, File xmlFile) throws Exception {
-        // Write the content into the XML file
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        DOMSource domSource = new DOMSource(document);
-        StreamResult streamResult = new StreamResult(xmlFile);
-        transformer.transform(domSource, streamResult);
+        DOMSource source = new DOMSource(document);
+        StreamResult result = new StreamResult(xmlFile);
+        transformer.transform(source, result);
     }
 }

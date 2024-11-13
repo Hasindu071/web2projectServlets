@@ -11,6 +11,7 @@
       background-image: url('poth.jpg');
       margin: 0;
       padding: 20px;
+      background-size: cover;
     }
     .container {
       background-color: #fff;
@@ -19,10 +20,12 @@
       max-width: 1300px; /* Set a reasonable max-width */
       margin: auto;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      overflow-x: auto; /* Ensure the container handles overflow */
     }
     h2 {
       text-align: center;
       color: #4a4a4a;
+      margin-bottom: 20px;
     }
 
     /* Search Bar Styling */
@@ -86,6 +89,8 @@
       cursor: pointer;
       color: white;
       font-size: 0.9em;
+      text-decoration: none;
+      display: inline-block;
     }
     .edit-button {
       background-color: #28a745;
@@ -122,10 +127,6 @@
   </div>
 
   <!-- Book Entries Table -->
-  <%
-    List<HashMap<Object, Object>> entriesData = (List<HashMap<Object, Object>>) request.getAttribute("entriesData");
-    if (entriesData != null && !entriesData.isEmpty()) {
-  %>
   <table>
     <thead>
     <tr>
@@ -145,8 +146,13 @@
     </thead>
     <tbody>
     <%
-      for (HashMap<Object, Object> entry : entriesData) {
-        String bookId = (String) entry.get("id");
+      // Get the book entries data from the servlet
+      List<HashMap<Object, Object>> entriesData = (List<HashMap<Object, Object>>) request.getAttribute("entriesData");
+
+      // If entriesData is not null and not empty, display the table rows
+      if (entriesData != null && !entriesData.isEmpty()) {
+        for (HashMap<Object, Object> entry : entriesData) {
+          String bookId = (String) entry.get("id");
     %>
     <tr>
       <td><%= bookId %></td>
@@ -162,23 +168,21 @@
       <td><%= entry.get("unitPrice") %></td>
       <td>
         <div class="action-buttons">
-          <a href="editBook?id=<%= bookId %>" class="edit-button">Edit</a>
-          <a href="deleteBook?id=<%= bookId %>" class="delete-button" onclick="return confirm('Are you sure you want to delete this book?');">Delete</a>
+          <a href="handle_form_servlet?action=delete&id=<%= bookId %>" class="delete-button">Delete</a>
+          <a href="handle_form_servlet?action=edit&id=<%= bookId %>" class="edit-button">Edit</a>
         </div>
       </td>
     </tr>
     <%
       }
+    } else {
+    %>
+    <tr><td colspan="12" class="no-data">No book entries available.</td></tr>
+    <%
+      }
     %>
     </tbody>
   </table>
-  <%
-  } else {
-  %>
-  <div class="no-data">No book entries available.</div>
-  <%
-    }
-  %>
 
   <!-- Back Link -->
   <a class="back-link" href="index.jsp">Back to Book List</a>
