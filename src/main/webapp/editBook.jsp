@@ -7,6 +7,7 @@
     // Ensure bookData is not null before attempting to render the form
     if (bookData == null) {
         response.sendRedirect("viewBook.jsp"); // Redirect to the view page if no data exists
+        return;
     }
 %>
 <!DOCTYPE html>
@@ -17,11 +18,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-image: url('EDITBOOK.jpg');
             padding: 20px;
         }
         h1 {
-            color: #333;
+            color: #000000;
         }
         form {
             background-color: #fff;
@@ -43,8 +44,17 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+        .back-button {
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 4px;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
         button {
-            background-color: #4CAF50;
+            background-color: #620edf;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -53,24 +63,39 @@
             font-size: 16px;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #6d2ccf;
         }
-        a {
-            display: inline-block;
-            margin-top: 10px;
-            color: #007bff;
-            text-decoration: none;
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none; /* Initially hidden */
         }
-        a:hover {
-            text-decoration: underline;
+        .toast.show {
+            display: block; /* Show when the toast is active */
         }
     </style>
+    <script>
+        // Function to hide the toast
+        function hideToast() {
+            document.getElementById("successToast").classList.remove("show");
+        }
+        // Automatically hide the toast after 3 seconds
+        window.onload = function() {
+            setTimeout(hideToast, 3000);
+        };
+    </script>
 </head>
 <body>
-<h1>Edit Book</h1>
 
 <!-- The form for editing the book data -->
 <form action="handle_form_servlet" method="post">
+    <h1>Edit Book</h1>
     <!-- Hidden fields for action and book ID -->
     <input type="hidden" name="action" value="edit">
     <input type="hidden" name="id" value="<%= bookData.get("id") != null ? bookData.get("id") : "" %>">
@@ -119,7 +144,19 @@
     <button type="submit">Save Changes</button>
 
     <!-- Cancel link -->
-    <a href="viewBook.jsp">Cancel</a>
+    <a href="viewBook.jsp" class="back-button">Back</a>
 </form>
+
+<!-- Toast Notification for Success Message -->
+<%
+    String success = request.getParameter("success");
+    if ("Data updated successfully".equals(success)) {
+%>
+<div id="successToast" class="toast show">
+    <strong>Success:</strong> Data submitted successfully!
+    <button onclick="hideToast()">Close</button>
+</div>
+<% } %>
+
 </body>
 </html>

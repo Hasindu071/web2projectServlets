@@ -17,10 +17,10 @@
       background-color: #fff;
       padding: 30px;
       border-radius: 8px;
-      max-width: 1300px; /* Set a reasonable max-width */
+      max-width: 1300px;
       margin: auto;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      overflow-x: auto; /* Ensure the container handles overflow */
+      overflow-x: auto;
     }
     h2 {
       text-align: center;
@@ -111,6 +111,45 @@
     .back-link:hover {
       text-decoration: underline;
     }
+
+    /* Modal Styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.4);
+      padding-top: 60px;
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      text-align: center;
+    }
+    .modal-button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .modal-button.confirm {
+      background-color: #28a745;
+      color: white;
+    }
+    .modal-button.cancel {
+      background-color: #dc3545;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -168,8 +207,8 @@
       <td><%= entry.get("unitPrice") %></td>
       <td>
         <div class="action-buttons">
-          <a href="handle_form_servlet?action=delete&id=<%= bookId %>" class="delete-button">Delete</a>
           <a href="handle_form_servlet?action=edit&id=<%= bookId %>" class="edit-button">Edit</a>
+          <button type="button" class="delete-button" onclick="confirmDelete('<%= bookId %>')">Delete</button>
         </div>
       </td>
     </tr>
@@ -187,5 +226,41 @@
   <!-- Back Link -->
   <a class="back-link" href="index.jsp">Back to Book List</a>
 </div>
+
+<!-- Modal for Confirmation -->
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <p>Are you sure you want to delete this book entry?</p>
+    <button class="modal-button confirm" onclick="confirmDeletion()">Yes</button>
+    <button class="modal-button cancel" onclick="closeModal()">No</button>
+  </div>
+</div>
+
+<script>
+  let bookIdToDelete = null;
+
+  function confirmDelete(bookId) {
+    bookIdToDelete = bookId;
+    document.getElementById("confirmModal").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("confirmModal").style.display = "none";
+  }
+
+  function confirmDeletion() {
+    if (bookIdToDelete) {
+      window.location.href = "handle_form_servlet?action=delete&id=" + bookIdToDelete;
+    }
+    closeModal();
+  }
+
+  // Close the modal if the user clicks anywhere outside of it
+  window.onclick = function(event) {
+    if (event.target == document.getElementById("confirmModal")) {
+      closeModal();
+    }
+  }
+</script>
 </body>
 </html>

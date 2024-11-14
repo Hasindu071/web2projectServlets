@@ -114,7 +114,56 @@
         ::placeholder {
             color: #aaa;
         }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 250px;
+            z-index: 1050;
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateX(100%);
+        }
 
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-header {
+            background-color: #28a745; /* Green color for success */
+            color: #fff;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .toast-body {
+            padding: 15px;
+            font-size: 14px;
+            color: #333;
+            background-color: #d4edda;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: auto;
+            line-height: 1;
+            padding: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .btn-close:hover {
+            color: #ffcccc;
+        }
     </style>
 </head>
 <body>
@@ -192,6 +241,33 @@
 
     <input type="submit" value="Save Changes">
 </form>
+<!-- Toast Notification for Success Message -->
+<%
+    String success = request.getParameter("success");
+    if (success != null && success.equals("Data submitted successfully")) {
+%>
+<div id="successToast" class="toast show">
+    <div class="toast-header">
+        <strong class="me-auto">Success</strong>
+        <button type="button" class="btn-close" onclick="hideToast()">
+            <!-- Close icon (SVG or PNG) -->
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-x' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E" alt="Close">
+        </button>
+    </div>
+    <div class="toast-body">
+        Data submitted successfully!
+    </div>
+</div>
+<% } %>
+<script>
+    // Function to hide the toast manually
+    function hideToast() {
+        document.getElementById("successToast").style.display = "none";
+    }
+
+    // Auto-hide the toast after 3 seconds
+    setTimeout(hideToast, 3000);
+</script>
 
 </body>
 </html>
