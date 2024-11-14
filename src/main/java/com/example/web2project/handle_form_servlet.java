@@ -124,16 +124,27 @@ public class handle_form_servlet extends HttpServlet {
             // Handle search action
             else if ("search".equals(action)) {
                 String searchTerm = request.getParameter("search").toLowerCase();
+                String selectedCategory = request.getParameter("category").toLowerCase();
+
                 entriesData = readXMLData(xmlFilePath);
                 List<HashMap<Object, Object>> filteredEntries = new ArrayList<>();
 
-                // Filter data based on search term
+                // Filter data based on search term and selected category
                 for (HashMap<Object, Object> entry : entriesData) {
                     String title = ((String) entry.get("title")).toLowerCase();
                     String author = ((String) entry.get("author")).toLowerCase();
                     String category = ((String) entry.get("category")).toLowerCase();
 
-                    if (title.contains(searchTerm) || author.contains(searchTerm) || category.contains(searchTerm)) {
+                    boolean matchesSearch = (searchTerm == null || searchTerm.isEmpty()) ||
+                            title.contains(searchTerm) ||
+                            author.contains(searchTerm) ||
+                            category.contains(searchTerm);
+
+                    boolean matchesCategory = (selectedCategory == null || selectedCategory.isEmpty()) ||
+                            category.equals(selectedCategory);
+
+                    // Add entry to filtered results if it matches both search term and category
+                    if (matchesSearch && matchesCategory) {
                         filteredEntries.add(entry);
                     }
                 }

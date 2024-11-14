@@ -156,16 +156,29 @@
 <div class="container">
   <h2>Book Entries</h2>
 
-  <!-- Search Bar -->
-  <div class="search-container">
-    <form action="handle_form_servlet" method="get">
-      <input type="text" name="search" class="search-bar" placeholder="Search by title, author, or category" />
-      <input type="hidden" name="action" value="search" />
-      <button type="submit" class="search-button">Search</button>
-    </form>
-  </div>
+    <!-- Search and Category Filter Form -->
+    <div class="search-container">
+        <form action="handle_form_servlet" method="get">
+            <input type="text" name="search" class="search-bar" placeholder="Search by title, author, or category" />
 
-  <!-- Book Entries Table -->
+            <!-- Category Dropdown Filter -->
+            <select name="category" class="search-bar">
+                <option value="">All Categories</option>
+                <option value="Comics">Comics</option>
+                <option value="History">History</option>
+                <option value="Classics">Classics</option>
+                <option value="Romance">Romance</option>
+                <option value="Horror">Horror</option>
+                <option value="Fantasy Fiction">Fantasy Fiction</option>
+            </select>
+
+            <input type="hidden" name="action" value="search" />
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </div>
+
+
+    <!-- Book Entries Table -->
   <table>
     <thead>
     <tr>

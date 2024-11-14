@@ -65,31 +65,7 @@
         button:hover {
             background-color: #6d2ccf;
         }
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: none; /* Initially hidden */
-        }
-        .toast.show {
-            display: block; /* Show when the toast is active */
-        }
     </style>
-    <script>
-        // Function to hide the toast
-        function hideToast() {
-            document.getElementById("successToast").classList.remove("show");
-        }
-        // Automatically hide the toast after 3 seconds
-        window.onload = function() {
-            setTimeout(hideToast, 3000);
-        };
-    </script>
 </head>
 <body>
 
@@ -146,17 +122,5 @@
     <!-- Cancel link -->
     <a href="viewBook.jsp" class="back-button">Back</a>
 </form>
-
-<!-- Toast Notification for Success Message -->
-<%
-    String success = request.getParameter("success");
-    if ("Data updated successfully".equals(success)) {
-%>
-<div id="successToast" class="toast show">
-    <strong>Success:</strong> Data submitted successfully!
-    <button onclick="hideToast()">Close</button>
-</div>
-<% } %>
-
 </body>
 </html>
