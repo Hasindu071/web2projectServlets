@@ -235,7 +235,37 @@
     <input type="number" id="quantity_on_hand" name="quantity_on_hand" placeholder="ex: 5" required>
 
     <label for="unit_price">Unit Price:</label>
-    <input type="text" id="unit_price" name="unit_price" placeholder="$18.99" required>
+    <input type="text" id="unit_price" name="unit_price" placeholder="Rs 18.99" required>
+    <small id="error_message" style="color: red; display: none;">Please enter a valid unit price.</small>
+
+    <script>
+        const unitPriceInput = document.getElementById('unit_price');
+        const errorMessage = document.getElementById('error_message');
+
+        unitPriceInput.addEventListener('input', () => {
+            const value = unitPriceInput.value.trim();
+
+            // Remove existing error message
+            errorMessage.style.display = 'none';
+
+            // Validation logic
+            try {
+                if (!value) throw "Unit price cannot be empty.";
+                const numericValue = parseFloat(value.replace(/[Rs,]/g, ''));
+
+                if (isNaN(numericValue)) throw "Please enter a numeric value.";
+                if (numericValue <= 0) throw "Unit price must be greater than zero.";
+                if (numericValue > 10000) throw "Unit price seems too high.";
+
+                unitPriceInput.style.borderColor = ""; // Clear error styling
+            } catch (err) {
+                unitPriceInput.style.borderColor = "red"; // Highlight input
+                errorMessage.textContent = err; // Display error message
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+
 
 
 

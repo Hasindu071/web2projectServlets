@@ -10,60 +10,88 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('books.jpeg'); /* Replace with your image path */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('books.jpeg'); /* Replace with your image path */
             background-size: cover;
             background-position: center;
-            color: #fff;
+            color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         .container {
             text-align: center;
-            padding: 50px;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-            border-radius: 10px;
-            margin: auto;
-            width: 60%;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent glass effect */
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px); /* Glassmorphism effect */
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 3em;
             margin-bottom: 20px;
+            font-weight: bold;
+            color: #e0b0ff; /* Lavender shade */
         }
 
         p {
             font-size: 1.2em;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            color: #dcdcdc; /* Soft white shade */
         }
 
         .button-container {
             display: flex;
-            justify-content: center;
-            gap: 20px; /* Space between buttons */
+            justify-content: space-evenly;
         }
 
         .button {
-            background-color: #1c4379; /* Bootstrap green */
-            color: white;
-            padding: 15px 30px;
+            background: linear-gradient(90deg, #1e90ff, #ff69b4); /* Gradient color */
+            color: #fff;
+            padding: 15px 25px;
             text-decoration: none;
-            border-radius: 5px;
-            font-size: 1.1em;
-            transition: background-color 0.3s, transform 0.3s; /* Animation effects */
+            border-radius: 50px;
+            font-size: 1.2em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .button:hover {
-            background-color: #620edf; /* Darker green on hover */
-            transform: scale(1.05); /* Slightly enlarge button */
+            transform: translateY(-5px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
         }
 
+        .button:active {
+            transform: translateY(0);
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #dcdcdc;
+        }
+
+        footer a {
+            color: #e0b0ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Welcome to the Book Inventory System</h1>
+    <h1>📚 Welcome to the Book Inventory System 📚</h1>
+    <p>Manage and explore your book inventory with ease. Click below to get started!</p>
     <div class="button-container">
-        <a href="form.jsp" class="button">Go to Form</a>
+        <a href="form.jsp" class="button">Add a Book</a>
         <a href="handle_form_servlet" class="button">View Inventory</a>
     </div>
 </div>
